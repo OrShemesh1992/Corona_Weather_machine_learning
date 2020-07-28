@@ -1,60 +1,82 @@
-# Import the Libraries
+# Support Vector Machine (SVM)
+
+# Importing the libraries
 import numpy as np
 import matplotlib.pyplot as plt
-from parser_data import reader
-from sklearn import svm, datasets
-from State_temperature import weather
+import pandas as pd
+import random
 
-list_confirmed = reader('dataset/covid_19_confirmed.csv')
-list_deaths = reader('dataset/covid_19_deaths.csv')
+# filesize = 1500                 #size of the really big file
 
-date=list_confirmed[0].dates
-for i,row in enumerate(list_confirmed):
-    for j,col in enumerate(date):
-        if  i>0:
-            # print(list_confirmed[i].dates[j])
-            # print(list_confirmed[i].country)
-            print(list_confirmed[i].lat,list_confirmed[i].long,date[j])
-            print(weather(list_confirmed[i].lat,list_confirmed[i].long,date[j]))
 
-# Import some Data from the iris Data Set
-# iris = datasets.load_iris()
-# # print (iris)
-# # Take only the first two features of Data.
-# # To avoid the slicing, Two-Dim Dataset can be used
-#
-# X = iris.data[:, :2]
-# # print(X)
-# y = iris.target
-# # print(y)
-#
-# # C is the SVM regularization parameter
-# C = 1.0
-#
-# # Create an Instance of SVM and Fit out the data.
-# # Data is not scaled so as to be able to plot the support vectors
-# svc = svm.SVC(kernel ='linear', C = 1).fit(X, y)
-#
-# # create a mesh to plot
-# x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
-# y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
-# h = (x_max / x_min)/100
-# xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
-# 		np.arange(y_min, y_max, h))
-#
-# # Plot the data for Proper Visual Representation
-# plt.subplot(1, 1, 1)
-#
-# # Predict the result by giving Data to the model
-# Z = svc.predict(np.c_[xx.ravel(), yy.ravel()])
-# Z = Z.reshape(xx.shape)
-# plt.contourf(xx, yy, Z, cmap = plt.cm.Paired, alpha = 0.8)
-#
-# plt.scatter(X[:, 0], X[:, 1], c = y, cmap = plt.cm.Paired)
-# plt.xlabel('Sepal length')
-# plt.ylabel('Sepal width')
-# plt.xlim(xx.min(), xx.max())
-# plt.title('SVC with linear kernel')
-#
-# # Output the Plot
-# plt.show()
+import pandas as pd
+import random
+p = 0.04  # 2% of the lines
+# keep the header, then take only 1% of lines
+# if random from [0,1] interval is greater than 0.01 the row will be skipped
+dataset = pd.read_csv(
+         'dataset/corona.csv',
+         header=0,
+         skiprows=lambda i: i>0 and random.random() > p
+)
+print(dataset)
+
+X = dataset.iloc[:, [0, 1]].values
+y = dataset.iloc[:, 2].values
+print(X)
+ # Splitting the dataset into the Training set and Test set
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25, random_state = 0)
+
+# Feature Scaling
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler()
+X_train = sc.fit_transform(X_train)
+X_test = sc.transform(X_test)
+
+# Fitting SVM to the Training set
+from sklearn.svm import SVC
+classifier = SVC(kernel = 'linear', random_state = 0)
+classifier.fit(X_train, y_train)
+
+# Predicting the Test set results
+y_pred = classifier.predict(X_test)
+ # Making the Confusion Matrix
+from sklearn.metrics import confusion_matrix
+cm = confusion_matrix(y_test, y_pred)
+
+# Visualising the Training set results
+from matplotlib.colors import ListedColormap
+X_set, y_set = X_train, y_train
+X1, X2 = np.meshgrid(np.arange(start = X_set[:, 0].min() - 1, stop = X_set[:, 0].max() + 1, step = 0.01),
+                     np.arange(start = X_set[:, 1].min() - 1, stop = X_set[:, 1].max() + 1, step = 0.01))
+plt.contourf(X1, X2, classifier.predict(np.array([X1.ravel(), X2.ravel()]).T).reshape(X1.shape),
+             alpha = 0.75, cmap = ListedColormap(('red', 'green')))
+plt.xlim(X1.min(), X1.max())
+plt.ylim(X2.min(), X2.max())
+for i, j in enumerate(np.unique(y_set)):
+    plt.scatter(X_set[y_set == j, 0], X_set[y_set == j, 1],
+                c = ListedColormap(('red', 'green'))(i), label = j)
+plt.title('SVM (Training set)')
+plt.xlabel('Age')
+plt.ylabel('Estimated Salary')
+plt.legend()
+plt.show()
+
+# Visualising the Test set results
+from matplotlib.colors import ListedColormap
+X_set, y_set = X_test, y_test
+X1, X2 = np.meshgrid(np.arange(start = X_set[:, 0].min() - 1, stop = X_set[:, 0].max() + 1, step = 0.01),
+                     np.arange(start = X_set[:, 1].min() - 1, stop = X_set[:, 1].max() + 1, step = 0.01))
+plt.contourf(X1, X2, classifier.predict(np.array([X1.ravel(), X2.ravel()]).T).reshape(X1.shape),
+             alpha = 0.75, cmap = ListedColormap(('red', 'green')))
+plt.xlim(X1.min(), X1.max())
+plt.ylim(X2.min(), X2.max())
+for i, j in enumerate(np.unique(y_set)):
+    plt.scatter(X_set[y_set == j, 0], X_set[y_set == j, 1],
+                c = ListedColormap(('red', 'green'))(i), label = j)
+plt.title('SVM (Test set)')
+plt.xlabel('Age')
+plt.ylabel('Estimated Salary')
+plt.legend()
+plt.show()

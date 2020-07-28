@@ -54,7 +54,7 @@ class covid_19_cf(object):
         self.country = country
         self.cf = cf
 
-def writer():
+def parser():
     list_deaths = reader1('dataset/covid_19_deaths.csv')
     list_confirmed = reader1('dataset/covid_19_confirmed.csv')
     list_weather = reader2('dataset/daily_weather_2020.csv')
@@ -81,9 +81,25 @@ def per_day(temp_d,temp_c):
     temp_d=[y - x for x, y in zip(floats_d, floats_d[1:])]
     temp_c=[y - x for x, y in zip(floats_c, floats_c[1:])]
     return temp_d,temp_c
-# def main():
-#     lis=writer()
-#     for x in lis:
-#         print(x.country,x.cf)
-# if __name__== "__main__":
-#   main()
+
+def writer(list_data):
+    with open('dataset/corona.csv', 'w', newline='') as file:
+        writer = csv.writer(file)
+        for i,x in enumerate(list_data):
+            for j,y in enumerate(x.cf):
+                writer.writerow([y[0],y[1],y[2]])
+                # print(y[0],y[1],y[2])
+        # writer = csv.writer(file)
+        # writer.writerow(["SN", "Name", "Contribution"])
+        # writer.writerow([1, "Linus Torvalds", "Linux Kernel"])
+        # writer.writerow([2, "Tim Berners-Lee", "World Wide Web"])
+        # writer.writerow([3, "Guido van Rossum", "Python Programming"])
+
+def main():
+    lis=parser()
+    # lis=writer()
+    # for x in lis:
+    #     print(x.country,x.cf)
+    writer(lis)
+if __name__== "__main__":
+  main()
