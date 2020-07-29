@@ -71,11 +71,11 @@ def parser():
                     if j > 20:
                         temp_w.append(w.dates[j][1])
                 temp_d,temp_c=per_day(temp_d,temp_c)
+                temp_d,temp_c,temp_w=temp_d[45:],temp_c[45:],temp_w[45:]
                 list_data.append(covid_19_cf(d.country ,list(zip(temp_d,temp_c,temp_w))))
     return list_data
 
 def per_day(temp_d,temp_c):
-    # print(temp_d,temp_d)
     floats_d = [float(item) for item in temp_d]
     floats_c = [float(item) for item in temp_c]
     temp_d=[y - x for x, y in zip(floats_d, floats_d[1:])]
@@ -88,18 +88,8 @@ def writer(list_data):
         for i,x in enumerate(list_data):
             for j,y in enumerate(x.cf):
                 writer.writerow([y[0],y[1],y[2]])
-                # print(y[0],y[1],y[2])
-        # writer = csv.writer(file)
-        # writer.writerow(["SN", "Name", "Contribution"])
-        # writer.writerow([1, "Linus Torvalds", "Linux Kernel"])
-        # writer.writerow([2, "Tim Berners-Lee", "World Wide Web"])
-        # writer.writerow([3, "Guido van Rossum", "Python Programming"])
 
-def main():
-    lis=parser()
-    # lis=writer()
-    # for x in lis:
-    #     print(x.country,x.cf)
-    writer(lis)
-if __name__== "__main__":
-  main()
+# def main():
+#     writer(parser())
+# if __name__== "__main__":
+#   main()
