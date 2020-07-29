@@ -1,4 +1,5 @@
 import csv
+import random
 import datetime
 class covid_19(object):
     def __init__(self, state, country, lat, long, dates ):
@@ -71,7 +72,7 @@ def parser():
                     if j > 20:
                         temp_w.append(w.dates[j][1])
                 temp_d,temp_c=per_day(temp_d,temp_c)
-                temp_d,temp_c,temp_w=temp_d[45:],temp_c[45:],temp_w[45:]
+                temp_d,temp_c,temp_w=temp_d[30:],temp_c[30:],temp_w[30:]
                 list_data.append(covid_19_cf(d.country ,list(zip(temp_d,temp_c,temp_w))))
     return list_data
 
@@ -83,11 +84,12 @@ def per_day(temp_d,temp_c):
     return temp_d,temp_c
 
 def writer(list_data):
+    list_random =  random.sample(list_data,len(list_data))
     with open('dataset/corona.csv', 'w', newline='') as file:
         writer = csv.writer(file)
-        for i,x in enumerate(list_data):
+        for i,x in enumerate(list_random):
             for j,y in enumerate(x.cf):
-                writer.writerow([y[0],y[1],y[2]])
+                writer.writerow([int(y[0]),int(y[1]),int(y[2])])
 
 # def main():
 #     writer(parser())
