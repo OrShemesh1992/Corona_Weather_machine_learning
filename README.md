@@ -20,12 +20,18 @@ Or Shemesh
 
 ******
 This project includes three machine learning algorithms:
+
 logistic regression, svm, pca
 
+
 The dataset we have chosen to use:
+
 The number of deaths from all countries on different dates
+
 The amount of those infected from each country on different dates
+
 The weather every day for the year 2020 from January to April (most up to date for the project)
+
 
 After connecting the databases using the longitude and latitude, we used algorithms to investigate 
 whether the temperature affects the number of people infected and dead from the corona virus
