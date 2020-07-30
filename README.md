@@ -37,7 +37,33 @@ The dataset we have chosen to use:
 
 After connecting the databases using the longitude and latitude, we used algorithms to investigate 
 whether the temperature affects the number of people infected and dead from the corona virus
+
 ******
+
+
+## conclusion:
+
+
+******
+According to weather data combined with death and confirmed
+We have concluded that the weather is directly related to the spread of the corona virus
+******
+
+
+
+* logistic regression
+
+![image](https://user-images.githubusercontent.com/46107190/88900408-01f4d900-d258-11ea-8343-7ee455ad5a20.png)
+
+
+* svm
+
+![image](https://user-images.githubusercontent.com/46107190/88900504-1e911100-d258-11ea-80bb-84f75cf8a82f.png)
+
+
+* pca
+
+![image](https://user-images.githubusercontent.com/46107190/88900566-39fc1c00-d258-11ea-8c6c-dbbbf9bcbd7d.png)
 
 
 
@@ -45,8 +71,12 @@ whether the temperature affects the number of people infected and dead from the 
 
 * https://www.kaggle.com/ 
 
-* https://he.wikipedia.org/
+* https://github.com/ghettocounselor/Machine_Learning
 
 * https://github.com/RoobiyaKhan/Classification-Models-Using-Python
+
+* https://scipy-lectures.org/packages/scikit-learn/index.html
+
+* https://rpubs.com/markloessi/497544
 
 
