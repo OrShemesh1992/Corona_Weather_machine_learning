@@ -12,36 +12,39 @@ import pandas as pd
 import random
 from parser_data import writer , parser
 
-#read and randomization corona file
-writer(parser())
-dataset = pd.read_csv('dataset/corona.csv')
-dataset=dataset[2000:3000]
+avg=0
+for i in range(100):
+    #read and randomization corona file
+    writer(parser())
+    dataset = pd.read_csv('dataset/corona.csv')
+    dataset=dataset[2000:3000]
 
-#Split the data into features and classification
-X = dataset.iloc[:, [0, 1]].values
-y = dataset.iloc[:, 2].values
+    #Split the data into features and classification
+    X = dataset.iloc[:, [0, 1]].values
+    y = dataset.iloc[:, 2].values
 
-# Splitting the dataset into the Training set 75% and Test set 25%
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25, random_state = 0)
+    # Splitting the dataset into the Training set 75% and Test set 25%
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25, random_state = 0)
 
-# Feature Scaling , Transformation
-sc = StandardScaler()
-X_train = sc.fit_transform(X_train)
-X_test = sc.transform(X_test)
+    # Feature Scaling , Transformation
+    sc = StandardScaler()
+    X_train = sc.fit_transform(X_train)
+    X_test = sc.transform(X_test)
 
-# Fitting SVM to the Training set
-classifier = SVC(kernel = 'linear', random_state = 0)
-classifier.fit(X_train, y_train)
+    # Fitting SVM to the Training set
+    classifier = SVC(kernel = 'linear', random_state = 0)
+    classifier.fit(X_train, y_train)
 
-# Predicting the Test set results
-y_pred = classifier.predict(X_test)
+    # Predicting the Test set results
+    y_pred = classifier.predict(X_test)
 
-# Making the Confusion Matrix
-cm = confusion_matrix(y_test, y_pred)
-print(cm)
+    # Making the Confusion Matrix
+    cm = confusion_matrix(y_test, y_pred)
+    print(cm)
 
-#Calculation of accuracy score
-print("accuracy score:  " , classifier.score(X_train, y_train))
+    #Calculation of accuracy score
+    avg+=classifier.score(X_train, y_train)
+print("average accuracy score:  " , avg/100)
 
 # Visualising the Training set results
 X_set, y_set = X_train, y_train
